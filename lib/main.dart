@@ -1,4 +1,20 @@
+import 'dart:convert';
+import 'package:profile/http.dart' as http;
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http1;
+
+Future<String> getPhoneNumber() async {
+  print('started');
+  String url = 'https://randomuser.me/api/';
+  Uri uri = Uri.parse(url);
+
+  http1.Response response = await http.get(uri);
+
+  Map m = jsonDecode(response.body);
+  print(m);
+  return m['results'][0]['phone'];
+}
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +28,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String phoneNumber = '1234';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -59,14 +77,17 @@ class _MyAppState extends State<MyApp> {
                 const SizedBox(height: 51),
                 const Rectangle(name: 'Somto Ferdinand', icon: Icons.person),
                 const SizedBox(height: 21),
-                const Rectangle(name: '+234 012 345 6789', icon: Icons.phone),
+                Rectangle(name: phoneNumber, icon: Icons.phone),
                 const SizedBox(height: 21),
                 ElevatedButton(
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
                     minimumSize: MaterialStateProperty.all(const Size(325, 50)),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    phoneNumber = await getPhoneNumber();
+                    setState(() {});
+                  },
                   child: const Text(
                     'Next',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
