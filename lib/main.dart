@@ -1,15 +1,14 @@
 import 'dart:convert';
-import 'package:profile/http.dart' as http;
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http1;
+import 'package:http/http.dart' as http;
 
 Future<String> getPhoneNumber() async {
   print('started');
   String url = 'https://randomuser.me/api/';
   Uri uri = Uri.parse(url);
 
-  http1.Response response = await http.get(uri);
+  http.Response response = await http.get(uri);
 
   Map m = jsonDecode(response.body);
   print(m);
