@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Future<String> getfullName() async {
-  print('started');
-
   String url = 'https://randomuser.me/api/';
   Uri uri = Uri.parse(url);
 
@@ -14,15 +12,12 @@ Future<String> getfullName() async {
 
   Map m = jsonDecode(response.body);
 
-  print(m);
   return m['results'][0]['name']['first'] +
       '' +
       m['results'][0]['name']['last'];
 }
 
 Future<String> getphoneNumber() async {
-  print('started');
-
   String url = 'https://randomuser.me/api/';
   Uri uri = Uri.parse(url);
 
@@ -30,21 +25,16 @@ Future<String> getphoneNumber() async {
 
   Map m = jsonDecode(response.body);
 
-  print('');
   return m['results'][0]['phone'];
 }
 
 Future<String> getlarge() async {
-  print('started');
-
   String url = 'https://randomuser.me/api/';
   Uri uri = Uri.parse(url);
 
   http.Response response = await http.get(uri);
 
   Map m = jsonDecode(response.body);
-
-  print('large');
 
   return m["results"][0]['picture']['large'];
 }
@@ -63,7 +53,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String phoneNumber = '1234';
   String fullName = 'Oltiboyev Qamar';
-  String large = 'image';
+  String large = 'https://randomuser.me/api/portraits/men/89.jpg';
 
   @override
   Widget build(BuildContext context) {
