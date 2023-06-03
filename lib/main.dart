@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<String> getPhoneNumber() async {
+Future<Map> getPhoneNumber() async {
   print('started');
   String url = 'https://randomuser.me/api/';
   Uri uri = Uri.parse(url);
@@ -12,7 +12,13 @@ Future<String> getPhoneNumber() async {
 
   Map m = jsonDecode(response.body);
   print(m);
-  return m['results'][0]['phone'];
+
+
+  Map s = {};
+  s['phoneNumber'] = m['results'][0]['number'];
+  s['name1'] = m['results'][0]['name']['first']['last'];
+  s['image'] = m['results'][0]['picture']['large'];
+  return s;
 }
 
 void main() {
@@ -28,83 +34,89 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String phoneNumber = '1234';
+  String name1 = 'men';
+  String image = 'assets/Ellipse 4.png';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 21.0, top: 11),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 211, 226, 248),
-                          borderRadius: BorderRadius.circular(50),
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 21.0, top: 11),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 211, 226, 248),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                color: Color.fromARGB(255, 62, 127, 224),
+                              )),
                         ),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: Color.fromARGB(255, 62, 127, 224),
-                            )),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 17),
+                  const Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.99,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 17),
-                const Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.99,
                   ),
-                ),
-                const SizedBox(height: 43),
-                CircleAvatar(
-                  radius: 80.5,
-                  child: Image.asset('assets/Ellipse 4.png'),
-                ),
-                const SizedBox(height: 51),
-                const Rectangle(name: 'Somto Ferdinand', icon: Icons.person),
-                const SizedBox(height: 21),
-                Rectangle(name: phoneNumber, icon: Icons.phone),
-                const SizedBox(height: 21),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-                    minimumSize: MaterialStateProperty.all(const Size(325, 50)),
+                  const SizedBox(height: 43),
+                  CircleAvatar(
+                    radius: 80.5,
+                    child: Image.asset(image),
                   ),
-                  onPressed: () async {
-                    phoneNumber = await getPhoneNumber();
-                    setState(() {});
-                  },
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  const SizedBox(height: 51),
+                  Rectangle(name: name1, icon: Icons.person),
+                  const SizedBox(height: 21),
+                  Rectangle(name: phoneNumber, icon: Icons.phone),
+                  const SizedBox(height: 21),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+                      minimumSize: MaterialStateProperty.all(const Size(325, 50)),
+                    ),
+                    onPressed: () async {
+                      phoneNumber = await getPhoneNumber();
+                      name1 = await getPhoneNumber();
+                      image = await getPhoneNumber();
+                      setState(() {});
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.medical_services_outlined, size: 40, color: Color.fromARGB(255, 62, 127, 224)),
-                Text(
-                  'TALKBOX',
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                ),
-              ],
-            )
-          ],
+                ],
+              ),
+              const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.medical_services_outlined, size: 40, color: Color.fromARGB(255, 62, 127, 224)),
+                  Text(
+                    'TALKBOX',
+                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
