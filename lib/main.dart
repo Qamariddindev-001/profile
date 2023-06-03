@@ -1,10 +1,9 @@
 import 'dart:convert';
-// import 'package:profile/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<Map> getPhoneNumber() async {
+Future<String> getPhoneNumber() async {
   print('started');
   String url = 'https://randomuser.me/api/';
   Uri uri = Uri.parse(url);
@@ -12,14 +11,35 @@ Future<Map> getPhoneNumber() async {
   http.Response response = await http.get(uri);
 
   Map m = jsonDecode(response.body);
-  print(m);
+  print('phone');
 
+  return m['results'][0]['phone'];
+}
 
-  Map s = {};
-  s['phoneNumber'] = m['results'][0]['number'];
-  s['name1'] = m['results'][0]['name']['first']['last'];
-  s['image'] = m['results'][0]['picture']['large'];
-  return s;
+Future<String> getImage() async {
+  print('started');
+  String url = 'https://randomuser.me/api/';
+  Uri uri = Uri.parse(url);
+
+  http.Response response = await http.get(uri);
+
+  Map m = jsonDecode(response.body);
+  print('image');
+
+  return m['results'][0]['picture']['large'];
+}
+
+Future<String> getName() async {
+  print('started');
+  String url = 'https://randomuser.me/api/';
+  Uri uri = Uri.parse(url);
+
+  http.Response response = await http.get(uri);
+
+  Map m = jsonDecode(response.body);
+  print('name');
+
+  return m['results'][0]['name']['first'] + '  ' + m['results'][0]['name']['last'];
 }
 
 void main() {
@@ -47,7 +67,6 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -81,7 +100,7 @@ class _MyAppState extends State<MyApp> {
                   const SizedBox(height: 43),
                   CircleAvatar(
                     radius: 80.5,
-                    child: Image.asset(image),
+                    backgroundImage: NetworkImage(image),
                   ),
                   const SizedBox(height: 51),
                   Rectangle(name: name1, icon: Icons.person),
@@ -95,8 +114,8 @@ class _MyAppState extends State<MyApp> {
                     ),
                     onPressed: () async {
                       phoneNumber = await getPhoneNumber();
-                      name1 = await getPhoneNumber();
-                      image = await getPhoneNumber();
+                      name1 = await getName();
+                      image = await getImage();
                       setState(() {});
                     },
                     child: const Text(
